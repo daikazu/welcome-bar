@@ -5,25 +5,21 @@ namespace Daikazu\WelcomeBar\Tests;
 use Daikazu\WelcomeBar\WelcomeBarServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Override;
 
 class TestCase extends Orchestra
 {
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Daikazu\\WelcomeBar\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'Daikazu\\WelcomeBar\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
         );
     }
 
-    protected function getPackageProviders($app)
-    {
-        return [
-            WelcomeBarServiceProvider::class,
-        ];
-    }
-
+    #[Override]
     public function getEnvironmentSetUp($app)
     {
         config()->set('database.default', 'testing');
@@ -33,5 +29,13 @@ class TestCase extends Orchestra
             (include $migration->getRealPath())->up();
          }
          */
+    }
+
+    #[Override]
+    protected function getPackageProviders($app)
+    {
+        return [
+            WelcomeBarServiceProvider::class,
+        ];
     }
 }
