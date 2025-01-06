@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Daikazu\WelcomeBar\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class WelcomeBarCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'welcome-bar';
 
     public $description = 'My command';
 
