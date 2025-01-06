@@ -2,9 +2,9 @@
 
 namespace Daikazu\WelcomeBar\Tests;
 
+use Daikazu\WelcomeBar\WelcomeBarServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Daikazu\WelcomeBar\WelcomeBarServiceProvider;
 
 class TestCase extends Orchestra
 {

@@ -2,9 +2,9 @@
 
 namespace Daikazu\WelcomeBar;
 
+use Daikazu\WelcomeBar\Commands\WelcomeBarCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Daikazu\WelcomeBar\Commands\WelcomeBarCommand;
 
 class WelcomeBarServiceProvider extends PackageServiceProvider
 {
