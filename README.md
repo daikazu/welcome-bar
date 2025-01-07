@@ -55,7 +55,12 @@ php artisan vendor:publish --tag="welcome-bar-views"
 ## Usage
 
 
-Add this to your layout file (e.g., `resources/views/layouts/app.blade.php`):
+Add this to your layout file (e.g., `resources/views/layouts/app.blade.php`) after the opening body tag:
+
+```html
+  <x-welcome-bar />
+```
+or alternatively you can use the blade directive
 
 ```html
  @include('welcome-bar::welcome-bar')
