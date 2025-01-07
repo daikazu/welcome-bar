@@ -3,17 +3,13 @@
 namespace Daikazu\WelcomeBar\Http\Controllers;
 
 use Daikazu\WelcomeBar\Services\WelcomeBarService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class WelcomeBarController extends Controller
 {
-    protected $welcomeBarService;
-
-    public function __construct(WelcomeBarService $welcomeBarService)
-    {
-        $this->welcomeBarService = $welcomeBarService;
-    }
+    public function __construct(protected WelcomeBarService $welcomeBarService) {}
 
     /**
      * GET /welcome-bar/data
@@ -27,6 +23,18 @@ class WelcomeBarController extends Controller
     }
 
     /**
+     * Sends a response indicating the success status of the ping operation.
+     *
+     * @return JsonResponse A JSON response containing the status of the operation.
+     */
+    public function ping()
+    {
+        return response()->json([
+            'status' => 'success',
+        ]);
+    }
+
+    /**
      * POST /welcome-bar/update
      * Accept JSON data from an external source and write it to the file
      */
@@ -35,8 +43,7 @@ class WelcomeBarController extends Controller
         // 1) Validate or parse the incoming data
         //    Example: require a JSON array of items
         $request->validate([
-            '*.message'  => 'required|string',
-            '*.cta.show' => 'boolean',
+            '*.message' => 'required|string',
             // ... add other validations as needed
         ]);
 
