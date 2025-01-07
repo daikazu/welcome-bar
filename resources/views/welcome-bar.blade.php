@@ -37,6 +37,7 @@
 @endphp
 
 @if ($bars->count() > 0)
+
     <!-- Wrapper that holds *all* stacked bars -->
     <div class="welcome-bar-wrapper" style="position: fixed; top: 0; left: 0; width: 100%; z-index: 9999;">
         @foreach ($bars as $bar)
@@ -93,6 +94,7 @@
                     align-items:  center;
                     justify-content: space-between;
                     padding: 0.75rem 1rem;
+                    font-weight: bold;
                 "
                 {{-- We can store data attributes for auto-hide in JS --}}
                 data-auto-hide="{{ $autoHide ? 'true' : 'false' }}"
@@ -120,6 +122,7 @@
                             color: {{ $buttonText }};
                             text-decoration: none;
                             border-radius: 3px;
+                            font-weight: normal;
                         "
                         >
                             {{ $ctaLabel }}
@@ -147,27 +150,70 @@
         @endforeach
     </div>
 
+    <style>
+        .welcome-bar {
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+
+        .welcome-bar.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+
+
     <script>
-        // Simple close-button logic
-        document.querySelectorAll('.welcome-bar-close').forEach(function (btn) {
-            btn.addEventListener('click', function (e) {
-                const bar = e.target.closest('.welcome-bar');
-                if (bar) {
-                    bar.remove();
+        document.addEventListener('DOMContentLoaded', function () {
+            // Check localStorage for closed bars
+            document.querySelectorAll('.welcome-bar').forEach(function (bar) {
+                const barId = bar.getAttribute('id');
+                const closedTimestamp = localStorage.getItem(barId);
+                if (closedTimestamp) {
+                    const now = new Date().getTime();
+                    const elapsed = now - parseInt(closedTimestamp, 10);
+                    const oneDay = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+                    if (elapsed < oneDay) {
+                        bar.remove();
+                    } else {
+                        localStorage.removeItem(barId); // Clear expired timestamp
+                        bar.classList.add('show'); // Show the bar with animation
+                    }
+                } else {
+                    bar.classList.add('show'); // Show the bar with animation
                 }
             });
-        });
 
-        // Auto-hide logic
-        document.querySelectorAll('.welcome-bar').forEach(function (bar) {
-            const autoHide = bar.getAttribute('data-auto-hide') === 'true';
-            const delay = parseInt(bar.getAttribute('data-auto-hide-delay'), 10);
+            // Simple close-button logic
+            document.querySelectorAll('.welcome-bar-close').forEach(function (btn) {
+                btn.addEventListener('click', function (e) {
+                    const bar = e.target.closest('.welcome-bar');
+                    if (bar) {
+                        const barId = bar.getAttribute('id');
+                        const autoHide = bar.getAttribute('data-auto-hide') === 'true';
+                        if (!autoHide) {
+                            const now = new Date().getTime();
+                            localStorage.setItem(barId, now.toString());
+                        }
+                        bar.classList.remove('show'); // Hide the bar with animation
+                        setTimeout(() => bar.remove(), 300); // Wait for animation to complete
+                    }
+                });
+            });
 
-            if (autoHide && !isNaN(delay)) {
-                setTimeout(function () {
-                    bar.remove();
-                }, delay);
-            }
+            // Auto-hide logic
+            document.querySelectorAll('.welcome-bar').forEach(function (bar) {
+                const autoHide = bar.getAttribute('data-auto-hide') === 'true';
+                const delay = parseInt(bar.getAttribute('data-auto-hide-delay'), 10);
+
+                if (autoHide && !isNaN(delay)) {
+                    setTimeout(function () {
+                        bar.classList.remove('show'); // Hide the bar with animation
+                        setTimeout(() => bar.remove(), 300); // Wait for animation to complete
+                    }, delay);
+                }
+            });
         });
     </script>
 @endif
