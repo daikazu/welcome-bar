@@ -1,6 +1,6 @@
 {
     "name": "daikazu/welcome-bar",
-    "description": "Add a welcome bar to the top of your website updatable via API",
+    "description": "Add a welcome bar for the top of your website updatable via API",
     "keywords": [
         "Daikazu",
         "laravel",
