@@ -80,8 +80,8 @@
                     }
                 }
 
-                // Generate a unique ID for auto-hide or close logic
-                $barId = 'welcome-bar-' . $loop->index;
+                // Generate a unique ID based on the message text
+                $barId = 'welcome-bar-' . hash('md5', $message);
             @endphp
 
             <div
