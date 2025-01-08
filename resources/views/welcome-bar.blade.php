@@ -21,12 +21,12 @@
 
                 // Theme
                 $theme = $bar['theme'] ?? [];
-                $variant        = $theme['variant']         ?? 'default';
+                $variant        = $theme['variant']         ?? 'prominent';
                 $bgColor        = $theme['background']      ?? '#000';
                 $textColor      = $theme['text']            ?? '#fff';
                 $buttonBg       = $theme['button']['background'] ?? '#fff';
                 $buttonText     = $theme['button']['text']       ?? '#000';
-                $contrast       = $theme['button']['contrastStrategy'] ?? 'manual';
+                $contrast = ($variant === 'slim') ? 'auto' : ($theme['button']['contrastStrategy'] ?? 'manual');
 
                 // If contrastStrategy = 'auto', you might compute a better text color:
                 if ($contrast === 'auto') {
@@ -73,11 +73,24 @@
                     gap: 1rem;
                 ">
                     @if ($ctaLabel && $ctaUrl)
-                        <a
-                            href="{{ $ctaUrl }}"
-                            target="{{ $ctaTarget }}"
-                            class="welcome-bar-cta"
-                            style="
+                        @if ($variant === 'slim')
+                            <a
+                                href="{{ $ctaUrl }}"
+                                target="{{ $ctaTarget }}"
+                                class="welcome-bar-cta"
+                                style="
+                                text-decoration: none;
+                                 color: {{ $buttonText }};
+                                 font-weight: normal;
+                                 ">
+                                {{ $ctaLabel }}
+                            </a>
+                        @else
+                            <a
+                                href="{{ $ctaUrl }}"
+                                target="{{ $ctaTarget }}"
+                                class="welcome-bar-cta"
+                                style="
                             margin-left: 1rem;
                             padding: 0.5rem 1rem;
                             background-color: {{ $buttonBg }};
@@ -85,10 +98,10 @@
                             text-decoration: none;
                             border-radius: 3px;
                             font-weight: normal;
-                        "
-                        >
-                            {{ $ctaLabel }}
-                        </a>
+                        ">
+                                {{ $ctaLabel }}
+                            </a>
+                        @endif
                     @endif
 
                     @if ($closable)
@@ -102,8 +115,7 @@
                             color: inherit;
                             font-size: 1.25rem;
                             cursor: pointer;
-                        "
-                        >
+                        ">
                             &times;
                         </button>
                     @endif
@@ -135,15 +147,15 @@
                 if (closedTimestamp) {
                     const now = new Date().getTime();
                     const elapsed = now - parseInt(closedTimestamp, 10);
-                    const oneDay = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+                    const oneDay = 24 * 60 * 60 * 1000;
                     if (elapsed < oneDay) {
                         bar.remove();
                     } else {
-                        localStorage.removeItem(barId); // Clear expired timestamp
-                        bar.classList.add('show'); // Show the bar with animation
+                        localStorage.removeItem(barId);
+                        bar.classList.add('show');
                     }
                 } else {
-                    bar.classList.add('show'); // Show the bar with animation
+                    bar.classList.add('show');
                 }
             });
 
@@ -153,13 +165,10 @@
                     const bar = e.target.closest('.welcome-bar');
                     if (bar) {
                         const barId = bar.getAttribute('id');
-                        const autoHide = bar.getAttribute('data-auto-hide') === 'true';
-                        if (!autoHide) {
-                            const now = new Date().getTime();
-                            localStorage.setItem(barId, now.toString());
-                        }
-                        bar.classList.remove('show'); // Hide the bar with animation
-                        setTimeout(() => bar.remove(), 300); // Wait for animation to complete
+                        const now = new Date().getTime();
+                        localStorage.setItem(barId, now.toString());
+                        bar.classList.remove('show');
+                        setTimeout(() => bar.remove(), 300);
                     }
                 });
             });
@@ -171,8 +180,8 @@
 
                 if (autoHide && !isNaN(delay)) {
                     setTimeout(function () {
-                        bar.classList.remove('show'); // Hide the bar with animation
-                        setTimeout(() => bar.remove(), 300); // Wait for animation to complete
+                        bar.classList.remove('show');
+                        setTimeout(() => bar.remove(), 300);
                     }, delay);
                 }
             });
