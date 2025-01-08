@@ -11,4 +11,9 @@ Route::group(['prefix' => 'api/welcome-bar'], function () {
     // Route to update the bar data from an external source
     Route::post('update', [WelcomeBarController::class, 'update'])
         ->middleware(config('welcome-bar.middleware.update', []));
+
+    // Route to ping the site to check if the welcome bar is installed
+    Route::get('ping', [WelcomeBarController::class, 'ping'])
+        ->middleware(config('welcome-bar.middleware.fetch', []));
+
 });
