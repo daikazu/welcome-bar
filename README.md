@@ -222,6 +222,46 @@ If valid, the bar is rendered with the specified colors, CTA button, and behavio
 
 **Tip:** If you want to hide all existing bars, simply remove (or empty) this JSON array.
 
+## API Routes
+
+### Fetch Current Bar Data
+
+**Endpoint:** `GET /api/welcome-bar/data`
+
+**Description:** Fetches the current welcome bar data.
+
+**Middleware:** Uses the middleware specified in `welcome-bar.middleware.fetch`.
+
+**Response:**
+- **200 OK:** Returns the current welcome bar data in JSON format.
+
+### Update Bar Data
+
+**Endpoint:** `POST /api/welcome-bar/update`
+
+**Description:** Updates the welcome bar data from an external source.
+
+**Middleware:** Uses the middleware specified in `welcome-bar.middleware.update`.
+
+**Request Body:**
+- **Content-Type:** `application/json`
+- **Body:** JSON array of message objects.
+
+**Response:**
+- **200 OK:** Returns a success message.
+- **400 Bad Request:** Returns an error message if the request is invalid.
+
+### Ping
+
+**Endpoint:** `GET /api/welcome-bar/ping`
+
+**Description:** Pings the site to check if the welcome bar is installed.
+
+**Middleware:** Uses the middleware specified in `welcome-bar.middleware.fetch`.
+
+**Response:**
+- **200 OK:** Returns a success message indicating the welcome bar is installed.
+
 ## Testing
 
 ```bash
